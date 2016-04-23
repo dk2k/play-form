@@ -1,0 +1,61 @@
+@*
+ * 
+ *@
+@()
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        @* Here's where we render the page title `String`. *@
+        <title>Welcome, dear Uploader!</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+        <script src="@routes.Assets.versioned("javascripts/jquery-1.12.3.min.js")" type="text/javascript"></script>
+	
+
+<script type="text/javascript">
+
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+  };
+
+// 100 kopeek v 1 ruble
+var convertToKopeykas = function (){
+    var roubles = document.getElementById('roubles').value;
+    //alert(roubles);
+    var kopeykas = parseFloat(roubles)*100;
+    document.getElementById('moneyAmount').value = kopeykas;
+};
+
+</script>
+
+    </head>
+    <body>
+	<h1>Welcome, dear Uploader!</h1>
+
+	@* @(myForm: Form[UploadedScan]) *@
+
+	@helper.form(action = routes.FormController.uploadFile, 'enctype -> "multipart/form-data") {
+	Payment function:	
+	<select name="paymentFunction">
+    @for(pfType <- PaymentFunction.values()){
+        <option value="@pfType.name()">@pfType.getValue()</option>
+    }
+	</select>
+
+	<br>
+	<input type="hidden" name="moneyAmount" id="moneyAmount"><br>
+	Sum(roubles): <input type="text" name="roubles" id="roubles"><br>
+	Comment: <br>
+	<textarea rows="4" cols="50" name="comment"></textarea>
+	<br>
+        Image to be uploaded: <input id="imgInput" type="file" name="scan" accept="image/*" onchange="loadFile(event)" /><br>
+	<br>
+	<img id="output" alt="your image" width="80" />
+    <p>
+        <input type="submit" onclick="convertToKopeykas()">
+    </p>
+	}
+    </body>
+</html>
